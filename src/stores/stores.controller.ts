@@ -9,10 +9,13 @@ import {
   HttpCode,
   Res,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { CreateStoreDTO } from './dto/create-store-dto';
 import { StoresService } from './stores.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { GetUser } from '../utils';
 
 // TODO: Need to create express response for delete
 // NOTE: Doing this will change the default handling to express
@@ -26,8 +29,10 @@ export class StoresController {
     return this.storesService.createStore(createStoreBody);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
+  findAll(@GetUser() user: any) {
+    console.log(user);
     return this.storesService.findAll();
   }
 

@@ -1,4 +1,5 @@
 import { Schema, Types } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 
 export interface User {
   username: string;
@@ -7,12 +8,13 @@ export interface User {
   profileImage?: string;
   active: boolean;
   bookingTickets: Types.ObjectId[];
+  storeAdmin: Types.ObjectId;
 }
 
 export const UserSchema = new Schema<User>(
   {
-    username: { type: String, required: true },
-    password: { Type: String, required: true, select: false },
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true, select: false },
     role: {
       type: String,
       enum: ['admin', 'user'],
@@ -21,6 +23,7 @@ export const UserSchema = new Schema<User>(
     profileImage: { type: String },
     active: { type: Boolean, default: true, select: false },
     bookingTickets: [{ type: Schema.Types.ObjectId, ref: 'Tickets' }],
+    storeAdmin: { type: Schema.Types.ObjectId, ref: 'Stores' },
   },
   {
     timestamps: true,
@@ -28,3 +31,11 @@ export const UserSchema = new Schema<User>(
     toObject: { virtuals: true },
   },
 );
+
+UserSchema.pre('save', async function (next) {
+  // Only run this function if password is actually modified
+  if (!this.isModified('password')) return next();
+  // hash the password with cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
+  next();
+});
