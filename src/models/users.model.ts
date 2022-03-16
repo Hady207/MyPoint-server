@@ -17,7 +17,7 @@ export const UserSchema = new Schema<User>(
     password: { type: String, required: true, select: false },
     role: {
       type: String,
-      enum: ['admin', 'user'],
+      enum: ['admin', 'user', 'super_admin'],
       default: 'user',
     },
     profileImage: { type: String },

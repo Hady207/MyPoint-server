@@ -15,10 +15,9 @@ import { Response } from 'express';
 import { CreateStoreDTO } from './dto/create-store-dto';
 import { StoresService } from './stores.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { GetUser } from '../utils';
-
-// TODO: Need to create express response for delete
-// NOTE: Doing this will change the default handling to express
+import { RolesGuard } from 'src/auth/roles.guard';
+import { GetUser, Roles } from '../decorators';
+import { Role } from 'src/enums/role.enum';
 
 @Controller('stores')
 export class StoresController {
@@ -29,10 +28,8 @@ export class StoresController {
     return this.storesService.createStore(createStoreBody);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@GetUser() user: any) {
-    console.log(user);
+  findAll() {
     return this.storesService.findAll();
   }
 
@@ -41,11 +38,15 @@ export class StoresController {
     return this.storesService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.SuperAdmin)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStoreBody: CreateStoreDTO) {
     return this.storesService.updateOne(id, updateStoreBody);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.SuperAdmin)
   @Delete(':id')
   remove(@Res() res: Response, @Param('id') id: string) {
     this.storesService.deleteOne(id);
