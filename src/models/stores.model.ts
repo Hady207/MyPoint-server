@@ -1,18 +1,18 @@
-import mongoose from 'mongoose';
+import { Schema, Types } from 'mongoose';
 
 export interface Store {
   name: string;
   category: string;
   image: string;
-  bookings: string[];
+  bookings: Types.ObjectId[];
 }
 
-export const StoreSchema = new mongoose.Schema<Store>(
+export const StoreSchema = new Schema<Store>(
   {
     name: { type: String, required: true },
     category: { type: String, required: true },
     image: { type: String, required: true },
-    bookings: { type: [String] },
+    bookings: [{ type: Schema.Types.ObjectId, ref: 'Booking' }],
   },
   {
     timestamps: true,

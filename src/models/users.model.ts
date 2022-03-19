@@ -22,8 +22,8 @@ export const UserSchema = new Schema<User>(
     },
     profileImage: { type: String },
     active: { type: Boolean, default: true, select: false },
-    bookingTickets: [{ type: Schema.Types.ObjectId, ref: 'Tickets' }],
-    storeAdmin: { type: Schema.Types.ObjectId, ref: 'Stores' },
+    bookingTickets: [{ type: Schema.Types.ObjectId, ref: 'Booking' }],
+    storeAdmin: { type: Schema.Types.ObjectId, ref: 'Store' },
   },
   {
     timestamps: true,

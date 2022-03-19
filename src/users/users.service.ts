@@ -7,21 +7,21 @@ import { CreateUserDTO } from './dto/create-user-dto';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private readonly userModal: Model<User>) {}
+  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   async registerUser(user: CreateUserDTO): Promise<User> {
-    return await this.userModal.create(user);
+    return await this.userModel.create(user);
   }
 
   async getAllUsers(): Promise<User[]> {
-    return await this.userModal.find();
+    return await this.userModel.find();
   }
 
   async getAuthenticatedUser(
     username: string,
     password: string,
   ): Promise<User> {
-    const user = await this.userModal.findOne({ username }).select('+password');
+    const user = await this.userModel.findOne({ username }).select('+password');
     if (!user && !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('credentials incorrect');
     }
@@ -29,14 +29,14 @@ export class UserService {
   }
 
   async getUser(username: string): Promise<User> {
-    return await this.userModal.findOne({ username });
+    return await this.userModel.findOne({ username });
   }
 
   async updateUser(id: string, user: CreateUserDTO): Promise<User> {
-    return await this.userModal.findByIdAndUpdate(id, user, { new: true });
+    return await this.userModel.findByIdAndUpdate(id, user, { new: true });
   }
 
   async deleteUser(id: string): Promise<User> {
-    return await this.userModal.findOneAndDelete({ _id: id });
+    return await this.userModel.findOneAndDelete({ _id: id });
   }
 }

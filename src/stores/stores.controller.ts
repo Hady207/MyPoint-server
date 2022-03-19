@@ -6,9 +6,7 @@ import {
   Param,
   Patch,
   Post,
-  HttpCode,
   Res,
-  HttpStatus,
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -16,7 +14,7 @@ import { CreateStoreDTO } from './dto/create-store-dto';
 import { StoresService } from './stores.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { GetUser, Roles } from '../decorators';
+import { Roles } from '../decorators';
 import { Role } from 'src/enums/role.enum';
 
 @Controller('stores')

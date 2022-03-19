@@ -7,26 +7,26 @@ import { Store } from '../models/stores.model';
 @Injectable()
 export class StoresService {
   constructor(
-    @InjectModel('Store') private readonly storeModal: Model<Store>,
+    @InjectModel('Store') private readonly storeModel: Model<Store>,
   ) {}
 
   async createStore(store: CreateStoreDTO): Promise<Store> {
-    return await this.storeModal.create(store);
+    return await this.storeModel.create(store);
   }
 
   async findAll(): Promise<Store[]> {
-    return await this.storeModal.find();
+    return await this.storeModel.find();
   }
 
   async findOne(id: string): Promise<Store> {
-    return await this.storeModal.findOne({ _id: id });
+    return await this.storeModel.findOne({ _id: id });
   }
 
   async updateOne(id: string, store: CreateStoreDTO): Promise<Store> {
-    return await this.storeModal.findByIdAndUpdate(id, store, { new: true });
+    return await this.storeModel.findByIdAndUpdate(id, store, { new: true });
   }
 
   async deleteOne(id: string): Promise<Store> {
-    return await this.storeModal.findOneAndDelete({ _id: id });
+    return await this.storeModel.findOneAndDelete({ _id: id });
   }
 }
