@@ -9,9 +9,7 @@ import { BookingsModule } from './bookings/bookings.module';
   imports: [
     StoreModule,
     UserModule,
-    MongooseModule.forRoot(
-      'mongodb+srv://hady207:2071996@cluster0.e2ldh.mongodb.net/myPointV1?retryWrites=true&w=majority',
-    ),
+    MongooseModule.forRoot(process.env.DB_URL),
     AuthModule,
     BookingsModule,
   ],
