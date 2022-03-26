@@ -14,8 +14,8 @@ import { CreateStoreDTO } from './dto/create-store-dto';
 import { StoresService } from './stores.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { Roles } from '../decorators';
-import { Role } from 'src/enums/role.enum';
+import { Roles } from '../utils/decorators';
+import { Role } from 'src/utils/enums/role.enum';
 
 @Controller('stores')
 export class StoresController {

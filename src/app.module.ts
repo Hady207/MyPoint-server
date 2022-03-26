@@ -7,9 +7,11 @@ import { BookingsModule } from './bookings/bookings.module';
 
 @Module({
   imports: [
+    MongooseModule.forRoot(process.env.DB_URL, {
+      autoIndex: true,
+    }),
     StoreModule,
     UserModule,
-    MongooseModule.forRoot(process.env.DB_URL),
     AuthModule,
     BookingsModule,
   ],

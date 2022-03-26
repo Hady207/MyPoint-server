@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/models/users.model';
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 import { CreateUserDTO } from './dto/create-user-dto';
 
 @Injectable()
@@ -22,14 +22,21 @@ export class UserService {
     password: string,
   ): Promise<User> {
     const user = await this.userModel.findOne({ username }).select('+password');
-    if (!user && !(await bcrypt.compare(password, user.password))) {
+    const passwordValidation = await bcrypt.compare(password, user.password);
+
+    if (!user || !passwordValidation) {
       throw new UnauthorizedException('credentials incorrect');
     }
     return user;
   }
 
-  async getUser(username: string): Promise<User> {
-    return await this.userModel.findOne({ username });
+  async getLoggedInUser(user) {
+    const user1 = await this.userModel.findOne({ _id: user.userID });
+    return user1;
+  }
+
+  async getUser(id: string): Promise<User> {
+    return await this.userModel.findOne({ _id: id });
   }
 
   async updateUser(id: string, user: CreateUserDTO): Promise<User> {

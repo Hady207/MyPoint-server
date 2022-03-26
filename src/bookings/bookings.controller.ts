@@ -9,12 +9,12 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { GetUser } from 'src/decorators';
+import { GetUser } from 'src/utils/decorators';
 import { BookingsService } from './bookings.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { Roles } from '../decorators';
-import { Role } from 'src/enums/role.enum';
+import { Roles } from '../utils/decorators';
+import { Role } from 'src/utils/enums/role.enum';
 
 @Controller('bookings')
 @UseGuards(JwtAuthGuard, RolesGuard)

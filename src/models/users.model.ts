@@ -13,7 +13,7 @@ export interface User {
 
 export const UserSchema = new Schema<User>(
   {
-    username: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true, dropDups: true },
     password: { type: String, required: true, select: false },
     role: {
       type: String,

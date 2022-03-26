@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  UseGuards,
   Param,
   Patch,
   Post,
@@ -11,6 +12,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { GetUser } from 'src/utils/decorators';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UserService } from './users.service';
 
 @Controller('users')
@@ -21,10 +24,17 @@ export class UsersController {
   findAll() {
     return this.userService.getAllUsers();
   }
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.storesService.findOne(id);
-  // }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.userService.getUser(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/myaccount')
+  findAuthUser(@GetUser() user: object) {
+    return this.userService.getLoggedInUser(user);
+  }
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateStoreBody: CreateStoreDTO) {
   //   return this.storesService.updateOne(id, updateStoreBody);
