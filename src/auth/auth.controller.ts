@@ -26,4 +26,15 @@ export class AuthController {
     const accessToken = await this.authService.login(user);
     res.status(201).json({ status: 'success', token: accessToken, user });
   }
+
+  @Post('register/admin')
+  async registerAdmin(@Res() res: Response, @Body() adminBody: any) {
+    const admin = await this.userService.registerAdmin(adminBody);
+    // remove the password from response
+    admin.password = undefined;
+    const accessToken = await this.authService.login(admin);
+    res
+      .status(201)
+      .json({ status: 'success', token: accessToken, user: admin });
+  }
 }

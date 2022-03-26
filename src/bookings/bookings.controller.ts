@@ -31,6 +31,12 @@ export class BookingsController {
     return this.bookingService.createBookingTicket(storeId, user, bookingData);
   }
 
+  @Roles(Role.Admin)
+  @Post('scan')
+  async scanBookedTicket(@Body() scanBody, @GetUser() user: any) {
+    return await this.bookingService.scanBookedTicket(scanBody, user?.storeId);
+  }
+
   @Roles(Role.User)
   @Get('myTickets')
   async getUserBookedTickets(@Res() res: Response, @GetUser() user: object) {
