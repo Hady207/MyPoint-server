@@ -23,7 +23,9 @@ export class BookingsService {
   }
 
   getUserAllBookedTickets(user) {
-    return this.bookingModel.find({ user: user?.userId });
+    return this.bookingModel
+      .find({ user: user?.userId })
+      .populate('store', 'name');
   }
 
   getOneBookedTicketForUser(bookingId, user) {
