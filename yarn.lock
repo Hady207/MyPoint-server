@@ -4814,6 +4814,11 @@ sourcemap-codec@^1.4.4:
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
   integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
 
+spacetime@^7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/spacetime/-/spacetime-7.1.2.tgz#73a94f0ba7f0c0b2230259b5ccf78dd9fd34cd16"
+  integrity sha512-MUTgK9KU9gMXhZddwe0nlgFnCJXT4RfuIRqyo8VcUexZa94zkxk1WpVv3THgvMFz1+Hq9okoNiGTvj6qBdN4Cg==
+
 sparse-bitfield@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/sparse-bitfield/-/sparse-bitfield-3.0.3.tgz#ff4ae6e68656056ba4b3e792ab3334d38273ca11"

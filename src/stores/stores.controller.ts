@@ -36,6 +36,11 @@ export class StoresController {
     return this.storesService.findOne(id);
   }
 
+  @Get(':id/bookings-yearly')
+  findBookingNum(@Param('id') id: string) {
+    return this.storesService.getBookingsYearly(id);
+  }
+
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.SuperAdmin)
   @Patch(':id')

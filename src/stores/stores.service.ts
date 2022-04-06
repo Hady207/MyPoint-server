@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+
 import { CreateStoreDTO } from './dto/create-store-dto';
 import { Store } from '../models/stores.model';
 
@@ -21,6 +22,17 @@ export class StoresService {
     );
   }
 
+  async numberOfBookingsToday(storeId) {
+    const store = await this.storeModel
+      .findOne({ _id: storeId })
+      .populate('bookings');
+
+    const bookArr = store.bookings.filter(
+      (data: any) => data?.bookingDate === null,
+    );
+    return bookArr;
+  }
+
   async findAll(): Promise<Store[]> {
     return await this.storeModel.find({}).populate('bookings');
   }
@@ -35,5 +47,22 @@ export class StoresService {
 
   async deleteOne(id: string): Promise<Store> {
     return await this.storeModel.findOneAndDelete({ _id: id });
+  }
+
+  async getBookingsYearly(id: string): Promise<Store[]> {
+    return await this.storeModel.aggregate([
+      {
+        $match: { _id: id },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: '$createdAt' },
+            month: { $month: '$createdAt' },
+          },
+          Total: { $sum: 1 },
+        },
+      },
+    ]);
   }
 }

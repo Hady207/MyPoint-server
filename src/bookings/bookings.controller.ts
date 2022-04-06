@@ -37,6 +37,16 @@ export class BookingsController {
     return await this.bookingService.scanBookedTicket(scanBody, user?.storeId);
   }
 
+  @Get(':storeId/bookings/yearly')
+  findBookingNum(@Param('storeId') storeId: string) {
+    return this.bookingService.getBookingsYearly(storeId);
+  }
+
+  @Get(':storeId/bookings/hourly')
+  findBookingNumHours(@Param('storeId') storeId: string) {
+    return this.bookingService.getBookingByHours(storeId);
+  }
+
   @Roles(Role.User)
   @Get('myTickets')
   async getUserBookedTickets(@Res() res: Response, @GetUser() user: object) {

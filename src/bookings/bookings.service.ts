@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Booking } from 'src/models/bookings.model';
 import { StoresService } from 'src/stores/stores.service';
 
@@ -14,6 +14,7 @@ export class BookingsService {
   async createBookingTicket(storeId, user, bookingObj) {
     const bookDoc = {
       bookingDate: bookingObj?.date,
+      bookingTime: bookingObj?.time,
       user: user?.userId,
       store: storeId,
     };
@@ -65,5 +66,38 @@ export class BookingsService {
   // get All Booked Tickets for specific store (For Admin)
   getAllBookedTicketsForStore(storeId) {
     return this.bookingModel.find({ store: storeId });
+  }
+
+  async getBookingsYearly(id: string): Promise<Booking[]> {
+    return await this.bookingModel.aggregate([
+      {
+        $match: { store: new Types.ObjectId(id) },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: '$createdAt' },
+            month: { $month: '$createdAt' },
+          },
+          Total: { $sum: 1 },
+        },
+      },
+    ]);
+  }
+
+  async getBookingByHours(id: string): Promise<Booking[]> {
+    return await this.bookingModel.aggregate([
+      {
+        $match: { store: new Types.ObjectId(id) },
+      },
+      {
+        $group: {
+          _id: {
+            hour: { $hour: { date: '$createdAt', timezone: 'Asia/Kuwait' } },
+          },
+          Total: { $sum: 1 },
+        },
+      },
+    ]);
   }
 }

@@ -3,7 +3,7 @@ import * as QRCode from 'qrcode';
 
 export interface Booking {
   bookingDate: string;
-  bookingTime?: Date;
+  bookingTime?: string;
   qrcode: string;
   user: Types.ObjectId;
   active: boolean;
@@ -14,7 +14,7 @@ export interface Booking {
 export const BookingSchema = new Schema<Booking>(
   {
     bookingDate: { type: String, required: true },
-    bookingTime: { type: Date },
+    bookingTime: { type: String },
     qrcode: { type: String },
     user: {
       type: Schema.Types.ObjectId,
