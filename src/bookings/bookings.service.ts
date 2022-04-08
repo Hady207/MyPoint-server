@@ -79,9 +79,12 @@ export class BookingsService {
             year: { $year: '$createdAt' },
             month: { $month: '$createdAt' },
           },
-          Total: { $sum: 1 },
+          total: { $sum: 1 },
         },
       },
+
+      { $sort: { '_id.month': 1 } },
+      { $project: { _id: 0, date: '$_id', total: 1 } },
     ]);
   }
 
@@ -93,11 +96,13 @@ export class BookingsService {
       {
         $group: {
           _id: {
-            hour: { $hour: { date: '$createdAt', timezone: 'Asia/Kuwait' } },
+            $hour: { date: '$createdAt', timezone: 'Asia/Kuwait' },
           },
-          Total: { $sum: 1 },
+          total: { $sum: 1 },
         },
       },
+      { $sort: { _id: 1 } },
+      { $project: { _id: 0, hours: '$_id', total: 1 } },
     ]);
   }
 }
