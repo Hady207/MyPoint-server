@@ -37,12 +37,12 @@ export class BookingsController {
     return await this.bookingService.scanBookedTicket(scanBody, user?.storeId);
   }
 
-  @Get(':storeId/bookings/yearly')
+  @Get(':storeId/yearly')
   findBookingNum(@Param('storeId') storeId: string) {
     return this.bookingService.getBookingsYearly(storeId);
   }
 
-  @Get(':storeId/bookings/hourly')
+  @Get(':storeId/hourly')
   findBookingNumHours(@Param('storeId') storeId: string) {
     return this.bookingService.getBookingByHours(storeId);
   }
