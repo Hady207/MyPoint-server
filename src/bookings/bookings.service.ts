@@ -88,6 +88,25 @@ export class BookingsService {
     ]);
   }
 
+  // async getBookingByHours(id: string): Promise<Booking[]> {
+  //   return await this.bookingModel.aggregate([
+  //     {
+  //       $match: { store: new Types.ObjectId(id) },
+  //     },
+  //     {
+  //       $group: {
+  //         _id: {
+  //           $hour: { date: '$createdAt', timezone: 'Asia/Kuwait' },
+  //         },
+  //         total: { $sum: 1 },
+  //       },
+  //     },
+  //     { $sort: { _id: 1 } },
+  //     { $project: { _id: 0, hours: '$_id', total: 1 } },
+  //   ]);
+  // }
+
+  //   $cond:[{$lte:[{$hour:{date:'$createdAt',timezone: 'Asia/Kuwait'}},12]},'morning','evening'],
   async getBookingByHours(id: string): Promise<Booking[]> {
     return await this.bookingModel.aggregate([
       {
@@ -96,7 +115,16 @@ export class BookingsService {
       {
         $group: {
           _id: {
-            $hour: { date: '$createdAt', timezone: 'Asia/Kuwait' },
+            $cond: [
+              {
+                $lte: [
+                  { $hour: { date: '$createdAt', timezone: 'Asia/Kuwait' } },
+                  12,
+                ],
+              },
+              'morning',
+              'evening',
+            ],
           },
           total: { $sum: 1 },
         },
