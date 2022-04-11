@@ -19,12 +19,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         username: payload.username,
         role: payload.role,
         storeId: payload.storeId,
+        fcmToken: payload.fcmToken,
       };
     }
     return {
       userId: payload.sub,
       username: payload.username,
       role: payload.role,
+      fcmToken: payload.fcmToken,
     };
   }
 }

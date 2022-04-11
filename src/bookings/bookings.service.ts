@@ -3,12 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Booking } from 'src/models/bookings.model';
 import { StoresService } from 'src/stores/stores.service';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class BookingsService {
   constructor(
     @InjectModel('Booking') private readonly bookingModel: Model<Booking>,
     private storeService: StoresService,
+    private httpService: HttpService,
   ) {}
   // creates a booking ticket should be used by (USER)
   async createBookingTicket(storeId, user, bookingObj) {
@@ -18,11 +21,34 @@ export class BookingsService {
       user: user?.userId,
       store: storeId,
     };
+
     const bookedTicket = await this.bookingModel.create(bookDoc);
     if (!bookedTicket) {
       throw new UnauthorizedException('booking failed');
     }
     await this.storeService.addToBookings(storeId, bookedTicket?._id);
+
+    if (user?.fcmToken) {
+      const notificationBody = {
+        to: user?.fcmToken,
+        notification: {
+          body: 'Thank you for booking',
+          title: 'Booked',
+        },
+      };
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `key=${process.env.LEGACY_TOKEN}`,
+      };
+      await firstValueFrom(
+        this.httpService.post(
+          `https://fcm.googleapis.com/fcm/send`,
+          notificationBody,
+          { headers },
+        ),
+      );
+    }
+
     return bookedTicket;
   }
 
