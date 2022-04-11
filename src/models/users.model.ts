@@ -7,6 +7,7 @@ export interface User {
   role: string;
   profileImage?: string;
   active: boolean;
+  fcmToken: string;
   bookingTickets: Types.ObjectId[];
   storeAdmin: Types.ObjectId;
 }
@@ -22,6 +23,7 @@ export const UserSchema = new Schema<User>(
     },
     profileImage: { type: String },
     active: { type: Boolean, default: true, select: false },
+    fcmToken: { type: String },
     bookingTickets: [{ type: Schema.Types.ObjectId, ref: 'Booking' }],
     storeAdmin: { type: Schema.Types.ObjectId, ref: 'Store' },
   },

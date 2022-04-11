@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
+import { Controller, Post, Body, Res, Patch, Param } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
@@ -36,5 +36,18 @@ export class AuthController {
     res
       .status(201)
       .json({ status: 'success', token: accessToken, user: admin });
+  }
+
+  @Patch('fcm/:id')
+  async updateFCMToken(
+    @Param('id') id: string,
+    @Res() res: Response,
+    @Body() updateBody: any,
+  ) {
+    await this.userService.updateUserToken(id, updateBody);
+
+    res
+      .status(201)
+      .json({ status: 'success', message: 'fcm token added', fcm: updateBody });
   }
 }

@@ -9,3 +9,7 @@ export class CreateUserDTO {
   username: string;
   password: string;
 }
+
+export class UserTokenDTO {
+  fcmToken: string;
+}

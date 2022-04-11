@@ -19,6 +19,9 @@ export class BookingsService {
       store: storeId,
     };
     const bookedTicket = await this.bookingModel.create(bookDoc);
+    if (!bookedTicket) {
+      throw new UnauthorizedException('booking failed');
+    }
     await this.storeService.addToBookings(storeId, bookedTicket?._id);
     return bookedTicket;
   }
@@ -58,7 +61,7 @@ export class BookingsService {
       { new: true },
     );
     if (!re) {
-      throw new UnauthorizedException('credentials incorrect');
+      throw new UnauthorizedException('scan failed');
     }
     return re;
   }

@@ -22,6 +22,7 @@ export class AuthService {
       sub: user._id,
       role: user.role,
       storeId: user.storeAdmin,
+      fcmToken: user.fcmToken,
     };
     return { accessToken: this.jwtService.sign(payload) };
   }
