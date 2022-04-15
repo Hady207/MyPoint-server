@@ -186,6 +186,20 @@ export class BookingsService {
       { $project: { _id: 0, hours: '$_id', total: 1 } },
     ]);
   }
-}
 
-// get the number of people scanned and didn't scan this month
+  // get the number of people scanned and didn't scan this month
+  async getScannedRatio(id: string): Promise<Booking[]> {
+    return await this.bookingModel.aggregate([
+      {
+        $match: { store: new Types.ObjectId(id) },
+      },
+      {
+        $group: {
+          _id: null,
+          scannedTotal: { $sum: { $cond: ['$scanned', 1, 0] } },
+          unscannedTotal: { $sum: { $cond: ['$scanned', 0, 1] } },
+        },
+      },
+    ]);
+  }
+}

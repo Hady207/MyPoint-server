@@ -47,6 +47,11 @@ export class BookingsController {
     return this.bookingService.getBookingByHours(storeId);
   }
 
+  @Get(':storeId/scan/ratio')
+  findBookingScanRatio(@Param('storeId') storeId: string) {
+    return this.bookingService.getScannedRatio(storeId);
+  }
+
   @Roles(Role.User)
   @Get('myTickets')
   async getUserBookedTickets(@Res() res: Response, @GetUser() user: object) {
