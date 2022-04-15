@@ -2,8 +2,8 @@ import { Schema, Types } from 'mongoose';
 import * as QRCode from 'qrcode';
 
 export interface Booking {
-  bookingDate: string;
-  bookingTime?: string;
+  bookingDate: Date;
+  bookingTime?: Date;
   qrcode: string;
   user: Types.ObjectId;
   active: boolean;
@@ -13,8 +13,8 @@ export interface Booking {
 
 export const BookingSchema = new Schema<Booking>(
   {
-    bookingDate: { type: String, required: true },
-    bookingTime: { type: String },
+    bookingDate: { type: Date, required: true },
+    bookingTime: { type: Date },
     qrcode: { type: String },
     user: {
       type: Schema.Types.ObjectId,

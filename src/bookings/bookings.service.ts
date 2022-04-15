@@ -81,15 +81,39 @@ export class BookingsService {
 
   // scans the booked ticket and change it's value (For Admin)
   async scanBookedTicket(bookingBody: any, storeId: string) {
-    const re = await this.bookingModel.findOneAndUpdate(
-      { _id: bookingBody.id, store: storeId },
-      { scanned: true },
-      { new: true },
-    );
-    if (!re) {
+    const scannedQr = await this.bookingModel
+      .findOneAndUpdate(
+        { _id: bookingBody.id, store: storeId },
+        { scanned: true },
+        { new: true },
+      )
+      .populate('user');
+    // console.log('token', scannedQr.user.fcmToken);
+    if (!scannedQr) {
       throw new UnauthorizedException('scan failed');
     }
-    return re;
+
+    // if (scannedQr?.user?.fcmToken) {
+    //   const notificationBody = {
+    //     to: scannedQr?.user?.fcmToken,
+    //     notification: {
+    //       body: 'QR Scan Compelete',
+    //       title: 'QR Scanned',
+    //     },
+    //   };
+    //   const headers = {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `key=${process.env.LEGACY_TOKEN}`,
+    //   };
+    //   await firstValueFrom(
+    //     this.httpService.post(
+    //       `https://fcm.googleapis.com/fcm/send`,
+    //       notificationBody,
+    //       { headers },
+    //     ),
+    //   );
+    // }
+    return scannedQr;
   }
 
   // get All Booked Tickets for specific store (For Admin)
@@ -105,8 +129,8 @@ export class BookingsService {
       {
         $group: {
           _id: {
-            year: { $year: '$createdAt' },
-            month: { $month: '$createdAt' },
+            year: { $year: '$bookingDate' },
+            month: { $month: '$bookingDate' },
           },
           total: { $sum: 1 },
         },
@@ -147,7 +171,7 @@ export class BookingsService {
             $cond: [
               {
                 $lte: [
-                  { $hour: { date: '$createdAt', timezone: 'Asia/Kuwait' } },
+                  { $hour: { date: '$bookingTime', timezone: 'Asia/Kuwait' } },
                   12,
                 ],
               },
@@ -163,3 +187,5 @@ export class BookingsService {
     ]);
   }
 }
+
+// get the number of people scanned and didn't scan this month
