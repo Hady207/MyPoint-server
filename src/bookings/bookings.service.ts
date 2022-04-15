@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Booking } from 'src/models/bookings.model';
 import { StoresService } from 'src/stores/stores.service';
 import { HttpService } from '@nestjs/axios';
+import { User } from 'src/models/users.model';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
@@ -87,32 +88,32 @@ export class BookingsService {
         { scanned: true },
         { new: true },
       )
-      .populate('user');
-    // console.log('token', scannedQr.user.fcmToken);
+      .populate<{ user: User }>('user');
+
     if (!scannedQr) {
       throw new UnauthorizedException('scan failed');
     }
 
-    // if (scannedQr?.user?.fcmToken) {
-    //   const notificationBody = {
-    //     to: scannedQr?.user?.fcmToken,
-    //     notification: {
-    //       body: 'QR Scan Compelete',
-    //       title: 'QR Scanned',
-    //     },
-    //   };
-    //   const headers = {
-    //     'Content-Type': 'application/json',
-    //     Authorization: `key=${process.env.LEGACY_TOKEN}`,
-    //   };
-    //   await firstValueFrom(
-    //     this.httpService.post(
-    //       `https://fcm.googleapis.com/fcm/send`,
-    //       notificationBody,
-    //       { headers },
-    //     ),
-    //   );
-    // }
+    if (scannedQr?.user?.fcmToken) {
+      const notificationBody = {
+        to: scannedQr?.user?.fcmToken,
+        notification: {
+          body: 'QR Scan Compelete',
+          title: 'QR Scanned',
+        },
+      };
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `key=${process.env.LEGACY_TOKEN}`,
+      };
+      await firstValueFrom(
+        this.httpService.post(
+          `https://fcm.googleapis.com/fcm/send`,
+          notificationBody,
+          { headers },
+        ),
+      );
+    }
     return scannedQr;
   }
 
@@ -141,25 +142,6 @@ export class BookingsService {
     ]);
   }
 
-  // async getBookingByHours(id: string): Promise<Booking[]> {
-  //   return await this.bookingModel.aggregate([
-  //     {
-  //       $match: { store: new Types.ObjectId(id) },
-  //     },
-  //     {
-  //       $group: {
-  //         _id: {
-  //           $hour: { date: '$createdAt', timezone: 'Asia/Kuwait' },
-  //         },
-  //         total: { $sum: 1 },
-  //       },
-  //     },
-  //     { $sort: { _id: 1 } },
-  //     { $project: { _id: 0, hours: '$_id', total: 1 } },
-  //   ]);
-  // }
-
-  //   $cond:[{$lte:[{$hour:{date:'$createdAt',timezone: 'Asia/Kuwait'}},12]},'morning','evening'],
   async getBookingByHours(id: string): Promise<Booking[]> {
     return await this.bookingModel.aggregate([
       {
