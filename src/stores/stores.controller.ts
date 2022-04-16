@@ -31,6 +31,11 @@ export class StoresController {
     return this.storesService.findAll();
   }
 
+  @Get('category/:category')
+  findStoresOnCategory(@Param('category') category: string) {
+    return this.storesService.findStoresWithCategory(category);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.storesService.findOne(id);

@@ -1,0 +1,19 @@
+[
+    {
+    "name":"National Bank Of Kuwait",
+    "category":"bank",
+    "image":"https://kuwaitlocal.com/img/BusinessLogo/logo_folder/national-bank-of-kuwait-abraq-khaitan-kuwait-16-04-06-08-04-07.jpg"
+},
+{
+    "name":"The Sultan Center",
+    "category":"super market",
+    "image":"https://timg0cf.b8cdn.com/images/logo/70/216270_logo_1484128815_n.png"
+},{
+    "name":"Oxygen Gym",
+    "category":"sport",
+    "image":"https://yt3.ggpht.com/ytc/AKedOLQoNNUpuTep8ur6FxE76MB8beNJKAqGup6jc6Kg=s900-c-k-c0x00ffffff-no-rj"
+}, {
+    "name":"Applebees",
+    "category":"resturant",
+    "image":"https://1000logos.net/wp-content/uploads/2017/09/Applebees-Logo-2014.jpg"
+}]

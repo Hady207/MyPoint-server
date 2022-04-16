@@ -41,6 +41,10 @@ export class StoresService {
     return await this.storeModel.findOne({ _id: id }).populate('bookings');
   }
 
+  async findStoresWithCategory(cat) {
+    return await this.storeModel.find({ category: cat });
+  }
+
   async updateOne(id: string, store: CreateStoreDTO): Promise<Store> {
     return await this.storeModel.findByIdAndUpdate(id, store, { new: true });
   }
