@@ -26,6 +26,7 @@ export class StoresController {
     return this.storesService.createStore(createStoreBody);
   }
 
+  // test
   @Get()
   findAll() {
     return this.storesService.findAll();
